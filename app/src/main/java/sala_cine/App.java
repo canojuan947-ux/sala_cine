@@ -34,11 +34,13 @@ public static void main(String[] args) {
                 sc.nextLine();
                 
                 if (opcionMenu == 1) {
-
+                
                 System.out.print("\nIngrese su nombre completo, por favor.\n-> ");
                 nombre = sc.nextLine();
 
-                String muestraDeSala = mostarSala(SALA);
+                inicializarSala();
+
+                String muestraDeSala = mostarSala(SALA,fila,columna);
                 System.out.println(muestraDeSala);
                 do{
                     do {System.out.println("Ingrese el numero de la fila de su asiento");
@@ -61,8 +63,9 @@ public static void main(String[] args) {
                 String salida = mostrarMenu(false);
                 System.out.println(salida);;
             }
-
-    System.out.println();reservarSilla(fila, columna);
+    
+    reservarSilla(fila, columna);
+    System.out.println("\n" + mostarSala(SALA, fila, columna));
     
     } catch (Exception e){
         System.out.println("Error: " + e.getMessage());
@@ -98,7 +101,7 @@ public static void main(String[] args) {
     }
 
     // Función para mostar la sala
-    public static String mostarSala(String[][] sala) {
+    public static String mostarSala(String[][] sala, int x, int y) {
 
         String salaMod ="                  PANTALLA\n"+
                         "=================================================\n"+
@@ -110,20 +113,34 @@ public static void main(String[] args) {
 
             for (int j = 0; j < sala[0].length; j++) {
 
-                SALA[i][j] = " ";
+                if (SALA[i][j].equals("X")){
+                    salaMod += "[X] ";
+                } else {
+                    salaMod += "[" + SALA[i][j] + "] ";
+                }
 
-                salaMod += "[" + SALA[i][j] + "] ";
-                    if (((j+1) % 3)== 0){
-                        salaMod += "  ";
-                    }
+                if (((j+1) % 3)== 0){
+                    salaMod += "  ";
+                }
                     
             }
+            
             salaMod += "\n";
         }
 
         salaMod +="=================================================\n\n" + 
                   "[ ] = Asiento disponible\n[X] = Asiento ocupado\n";  
         return salaMod;
+    }
+
+    // Funcion para darle valores a la sala
+    public static void inicializarSala() {
+
+        for (int i = 0; i < SALA.length; i++) {
+            for (int j = 0; j < SALA[0].length; j++) {
+                SALA[i][j] = " ";
+            }
+        }
     }
 
 }
