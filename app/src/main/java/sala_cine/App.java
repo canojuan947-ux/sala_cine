@@ -7,6 +7,8 @@ public class App {
 
     // Variables globales
     public static String [][] SALA = new String[6][9];
+    public static double TOTALAPAGAR = 0; 
+    public static double[] SILLAS = new double[54];
 
 public static void main(String[] args) {
 
@@ -15,7 +17,6 @@ public static void main(String[] args) {
         // Variables
         int cantidaDeSillas = 0, fila = 0, columna = 0, continuar = 0;
         String nombre = "";
-        double totalAPagar = 0;
 
         Scanner sc = new Scanner(System.in);
 
@@ -57,6 +58,8 @@ public static void main(String[] args) {
                         System.out.println("\n" + mostarSala(SALA, fila, columna));
                     } while (continuar < 1 || continuar > 2);
                 }while(continuar == 1);
+
+                System.out.println(facturaFinal(nombre));
 
                 } else if (opcionMenu == 2){
                     System.out.println(listaPrecios());
@@ -107,6 +110,8 @@ public static void main(String[] args) {
     // Función para mostar la sala
     public static String mostarSala(String[][] sala, int x, int y) {
 
+        int contador = 0;
+
         String salaMod ="                  PANTALLA\n"+
                         "=================================================\n"+
                         "     1   2   3     4   5   6     7   8   9\n";
@@ -119,8 +124,13 @@ public static void main(String[] args) {
 
                 if (SALA[i][j].equals("X")){
                     salaMod += "[X] ";
-                    if (i == 1){
 
+                    if (i == 1){
+                        SILLAS[contador] = 25000;
+                        TOTALAPAGAR += 25000;
+                    } else {
+                        SILLAS[contador] = 17000;
+                        TOTALAPAGAR += 17000;
                     }
                 } else {
                     salaMod += "[" + SALA[i][j] + "] ";
@@ -129,7 +139,7 @@ public static void main(String[] args) {
                 if (((j+1) % 3)== 0){
                     salaMod += "  ";
                 }
-                    
+                contador++;
             }
             if(i == 1){
                 salaMod += "(fila VIP)";
@@ -142,9 +152,10 @@ public static void main(String[] args) {
         return salaMod;
     }
 
-    // Funcion para darle valores a la sala
+    // Funcion para darle valores a la sala y sillas reservadas
     public static void inicializarSala() {
 
+        // Sala
         for (int i = 0; i < SALA.length; i++) {
 
             for (int j = 0; j < SALA[0].length; j++) {
@@ -152,16 +163,50 @@ public static void main(String[] args) {
                 SALA[i][j] = " ";
             }
         }
+
+        // Sillas
+        for (int i = 0; i < SILLAS.length; i++) {
+            SILLAS[i] = 0;
+        }
     }
 
     // Funcion para mostrar lista de precios
     public static String listaPrecios() {
+
         String precios = " _____   ______ _______ _______ _____  _____  _______\n" + //
                         "|_____] |_____/ |______ |         |   |     | |______\n" + //
                         "|       |    \\_ |______ |_____  __|__ |_____| ______|\n" + //
                          "=====================================================\n\n" +
-                         "Silla normal = 17.000 cop      Silla VIP = 25.000 cop\n\n";
+                         "Silla normal = 17.000 cop      Silla VIP = 25.000 cop\n";
+
         return precios;
+    }
+
+    // Función para hacer la factura
+    public static String facturaFinal(String name) {
+
+        int contador = 1;
+        
+        String factura = "_____  ___   ____ _____ __ __ _____  ___  \n" + //
+                        "||==  ||=|| ((     ||   || || ||_// ||=|| \n" + //
+                        "||    || ||  \\\\__  ||   \\\\_// || \\\\ || || \n" + //
+                        "========================================= \n"+
+                        "Nombre de reserva = " + name + "\n" +
+                        "========================================= \n";
+
+        for (int i = 0; i < SILLAS.length; i++) {
+
+            if (SILLAS[i] != 0) {
+                factura += "Silla " + contador + " = " + SILLAS[i] + "\n";
+                contador++;
+            }
+
+        }
+        
+        factura +="=========================================\n" +
+                  "Total a pagar = " + TOTALAPAGAR;
+
+        return factura;
     }
 
 }
