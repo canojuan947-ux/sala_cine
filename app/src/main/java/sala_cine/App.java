@@ -9,13 +9,14 @@ public class App {
     public static String [][] SALA = new String[6][9];
     public static double TOTALAPAGAR = 0; 
     public static double[] SILLAS = new double[54];
+    public static boolean USUARIOREGISTRADO = false;
 
 public static void main(String[] args) {
 
     // Leer el archivo con las sillas disponibles
     try {                                                                            
         // Variables
-        int cantidaDeSillas = 0, fila = 0, columna = 0, continuar = 0;
+        int cantidaDeSillas = 0, fila = 0, columna = 0, continuar = 0, usuarioRegistrado = 0;
         String nombre = "";
 
         Scanner sc = new Scanner(System.in);
@@ -44,7 +45,15 @@ public static void main(String[] args) {
 
                 String muestraDeSala = mostarSala(SALA,fila,columna);
                 System.out.println(muestraDeSala);
-                do{
+                do{ 
+                    do {System.out.print("¿Es usted un usuario registrado?\n1. Si\n2. No\n\n-> ");
+                        usuarioRegistrado = sc.nextInt(); sc.nextLine();
+                        if (usuarioRegistrado == 1) {
+                            USUARIOREGISTRADO = true;
+                        } else {
+                            USUARIOREGISTRADO = false;
+                        }
+                    } while (usuarioRegistrado < 1 || usuarioRegistrado > 2);
                     do {System.out.print("Ingrese el numero de la fila de su asiento == ");
                         fila = sc.nextInt(); sc.nextLine();
                     } while (fila < 1 || fila > 6);
@@ -126,11 +135,24 @@ public static void main(String[] args) {
                     salaMod += "[X] ";
 
                     if (i == 1){
-                        SILLAS[contador] = 25000;
-                        TOTALAPAGAR += 25000;
+
+                        if (USUARIOREGISTRADO == true) {
+                            SILLAS[contador] = 20000;
+                            TOTALAPAGAR += 20000;
+                        } else{
+                            SILLAS[contador] = 25000;
+                            TOTALAPAGAR += 25000;
+                        }
+
                     } else {
-                        SILLAS[contador] = 17000;
-                        TOTALAPAGAR += 17000;
+                        
+                        if (USUARIOREGISTRADO == true) {
+                            SILLAS[contador] = 12000;
+                            TOTALAPAGAR += 12000;
+                        } else {
+                            SILLAS[contador] = 17000;
+                            TOTALAPAGAR += 17000;
+                        }
                     }
                 } else {
                     salaMod += "[" + SALA[i][j] + "] ";
@@ -174,10 +196,16 @@ public static void main(String[] args) {
     public static String listaPrecios() {
 
         String precios = " _____   ______ _______ _______ _____  _____  _______\n" + //
-                        "|_____] |_____/ |______ |         |   |     | |______\n" + //
-                        "|       |    \\_ |______ |_____  __|__ |_____| ______|\n" + //
-                         "=====================================================\n\n" +
-                         "Silla normal = 17.000 cop      Silla VIP = 25.000 cop\n";
+                        "|_____] |_____/ |______ |         |   |     | |______ \n" + //
+                        "|       |    \\_ |______ |_____  __|__ |_____| ______|\n\n" + //
+                         "=====================================================\n" +
+                         "  USUARIO SIN REGISTRAR   |    USUARIO REGISTRADO    \n" +
+                         "=====================================================\n" +
+                         "Silla normal = 17.000 cop | Silla normal = 12.000 cop\n" +
+                         "__________________________|__________________________\n" + 
+                         "  Silla VIP = 25.000 cop  |  Silla VIP = 20.000 cop  \n" +
+                         "__________________________|__________________________\n" +
+                         "=====================================================\n";
 
         return precios;
     }
@@ -191,7 +219,7 @@ public static void main(String[] args) {
                         "||==  ||=|| ((     ||   || || ||_// ||=|| \n" + //
                         "||    || ||  \\\\__  ||   \\\\_// || \\\\ || || \n" + //
                         "========================================= \n"+
-                        "Nombre de reserva = " + name + "\n" +
+                        "Nombre de reserva = " + name + ((USUARIOREGISTRADO == true) ? " (Registrado)" : " (No registrado)") + "\n" +
                         "========================================= \n";
 
         for (int i = 0; i < SILLAS.length; i++) {
