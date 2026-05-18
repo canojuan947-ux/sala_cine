@@ -15,12 +15,13 @@ public static void main(String[] args) {
         // Variables
         int cantidaDeSillas = 0, fila = 0, columna = 0, continuar = 0;
         String nombre = "";
+        double totalAPagar = 0;
 
         Scanner sc = new Scanner(System.in);
 
         // menú bienvenida
         System.out.println("\n======================\n" + 
-                           "¡Bienvenido a Cinemax!\n" +
+                           "¡BIENVENIDO A CINEMAX!\n" +
                            "======================\n");
         System.out.print("¿Desea ver el menú de opciones? \n1. Si \n2. No \n\n-> ");
         int opcion = sc.nextInt();
@@ -43,17 +44,23 @@ public static void main(String[] args) {
                 String muestraDeSala = mostarSala(SALA,fila,columna);
                 System.out.println(muestraDeSala);
                 do{
-                    do {System.out.println("Ingrese el numero de la fila de su asiento");
+                    do {System.out.print("Ingrese el numero de la fila de su asiento == ");
                         fila = sc.nextInt(); sc.nextLine();
                     } while (fila < 1 || fila > 6);
-                    do {System.out.println("Ingrese el numero de la columna de su asiento");
-                        columna = sc.nextInt();sc.nextLine();
+                    do {System.out.print("Ingrese el numero de la columna de su asiento == ");
+                        columna = sc.nextInt(); sc.nextLine();
                     } while (columna < 1 || columna > 9);
-                    do{System.out.println("¿Desea reservar otra silla?\n1. Si\n2. No");   
-                        continuar = sc.nextInt(); sc.nextLine();              
+                    do{System.out.print("\n¿Desea reservar otra silla?\n1. Si\n2. No\n\n-> ");   
+                        continuar = sc.nextInt(); sc.nextLine();
+                        
+                        reservarSilla(fila, columna);
+                        System.out.println("\n" + mostarSala(SALA, fila, columna));
                     } while (continuar < 1 || continuar > 2);
                 }while(continuar == 1);
 
+                } else if (opcionMenu == 2){
+                    System.out.println(listaPrecios());
+                
                 } else {
                     String salida = mostrarMenu(false);
                     System.out.println(salida);;
@@ -63,9 +70,6 @@ public static void main(String[] args) {
                 String salida = mostrarMenu(false);
                 System.out.println(salida);;
             }
-    
-    reservarSilla(fila, columna);
-    System.out.println("\n" + mostarSala(SALA, fila, columna));
     
     } catch (Exception e){
         System.out.println("Error: " + e.getMessage());
@@ -83,7 +87,7 @@ public static void main(String[] args) {
                         " ▀█▄▄▀  ▄▄█▄▄  █   █  ▀█▄▄▀  █ █ █  ▀▄▄▀█  ▄▀ ▀▄ \n" + //
                         "                                                 \n" + //
                         "                                                 \n" +
-                        "1. Reservar un asiento \n2. Salir\n\n-> ";
+                        "1. Reservar un asiento \n2. Ver lista de precios \n3. Salir\n\n-> ";
 
         String salidaMenu = "¡Hasta luego!"; 
         
@@ -115,6 +119,9 @@ public static void main(String[] args) {
 
                 if (SALA[i][j].equals("X")){
                     salaMod += "[X] ";
+                    if (i == 1){
+
+                    }
                 } else {
                     salaMod += "[" + SALA[i][j] + "] ";
                 }
@@ -124,7 +131,9 @@ public static void main(String[] args) {
                 }
                     
             }
-            
+            if(i == 1){
+                salaMod += "(fila VIP)";
+            }
             salaMod += "\n";
         }
 
@@ -137,10 +146,22 @@ public static void main(String[] args) {
     public static void inicializarSala() {
 
         for (int i = 0; i < SALA.length; i++) {
+
             for (int j = 0; j < SALA[0].length; j++) {
+
                 SALA[i][j] = " ";
             }
         }
+    }
+
+    // Funcion para mostrar lista de precios
+    public static String listaPrecios() {
+        String precios = " _____   ______ _______ _______ _____  _____  _______\n" + //
+                        "|_____] |_____/ |______ |         |   |     | |______\n" + //
+                        "|       |    \\_ |______ |_____  __|__ |_____| ______|\n" + //
+                         "=====================================================\n\n" +
+                         "Silla normal = 17.000 cop      Silla VIP = 25.000 cop\n\n";
+        return precios;
     }
 
 }
